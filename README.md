@@ -33,7 +33,7 @@ Udemy 的课程 Learn To Create A Farming Game With Unity 6 &amp; C# 的笔记�
 
 回到 Tile Palette 简单介绍以下几个常用的绘制工具：
 
-![](./pictures/Tile Palette.png)
+![](./pictures/TilePalette.png)
 
 - 从左往右第三个工具：也就是现在选择的这个是画笔，可以允许我们使用鼠标随意画瓦片。
 - 从左往右第四个工具：允许我们使用矩形工具画出大量瓦片。
@@ -41,7 +41,7 @@ Udemy 的课程 Learn To Create A Farming Game With Unity 6 &amp; C# 的笔记�
 
 我们会发现如果我们填入非整格填满的瓦片的话，就会露出透明的部分，就像下面这样。
 
-<img src="./pictures/TileError.png" style="zoom: 50%;" />
+![](./pictures/TileError.png)
 
 解决这个问题的办法就是以这个绿色为底层背景，再在上面添加一层瓦片集。右键 Grid，2D Object -> Tilemap -> Rectangular，将其命名为 `Ground Overlay`，选中之后即可在第一层绿色背景上画新的一层而且不会露出透明部分。
 
