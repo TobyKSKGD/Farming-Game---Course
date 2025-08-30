@@ -331,6 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   theRB: {fileID: 575821290}
   moveSpeed: 8
+  moveInput: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
 --- !u!1 &1088084663
 GameObject:
   m_ObjectHideFlags: 0

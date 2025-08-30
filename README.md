@@ -95,3 +95,23 @@ theRB.linearVelocity = new Vector2(moveSpeed, 0f);
 ```
 
 这里的意思是给 `theRB` 变量的 `linearVelocity` 水平增加 `(moveSpeed, 0f)`，这里的 Vector2 新变量包含两个值，一个为 X 轴的值，一个为 Y 轴的值，这里向实现水平移动，所以第一个值是移动的速度，第二个值是 `0f`（`0f` 的意思是浮点数的 0，如果只写 `0` 就是 int 类型的数字 0）。前面说过 Update() 函数每一帧都会调用一次，所以这里每一帧都会增加角色的 X 轴的坐标，开启调试的效果就是角色一直往右边走。
+
+### Controlling The Player
+
+现在来说明如何控制玩家的移动。因此，我们想要做的当然是能够捕捉来自玩家的输入，知道玩家按下了什么来控制实际角色。
+
+好消息是，Unity 内置了一个完整的输入系统，默认设置了一堆东西来处理玩家的各种类型的输入，在 Project 资源库中的 Assets 中可以找到这个系统 InputSystem_Actions（三折叠地图的图标）。我们双击打开这个系统，展开 Move，就可以看到常见的 WASD 移动方式。
+
+了解这个系统之后，我们便可以将其关闭然后回到脚本中了。创建一个 InputSystem Actions 中的类：
+
+```c#
+public InputActionReference moveInput;
+```
+
+回到 Unity，会看到 Player 多了变量 `Move Input`，不过此时其值为 `None`，点击右边中间有点的圈可以看到很多控制方式，我们选择 Player/Move，现在我们对输入系统上的运动动作有了参考。然后将我们之前在 Update() 函数中的语句改成：
+
+```c#
+theRB.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
+```
+
+回到 Unity 调试，此时使用 WASD 便可以控制我们的角色了。这里 `moveInput.action.ReadValue<Vector2>()` 是获取玩家输入的方向，乘上角色的移动速度便是整个移动的实现。
