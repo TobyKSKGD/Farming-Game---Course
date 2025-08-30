@@ -68,3 +68,12 @@ Udemy 的课程 Learn To Create A Farming Game With Unity 6 &amp; C# 的笔记�
 - Start()：在 MonoBehavior 创建后首次执行 Update 之前，Start() 函数会被调用一次。
 - Update()：每帧调用一次 Update() 函数。
 
+我们知道，现在这里的 Rigidbody 碰撞体控制着我们角色的物理特性，我们想用它来让我们的玩家四处移动。虽然创建的脚本与物体的相关属性在同一个位置，但是脚本无权直接访问与控制这些属性。而一般的做法是创建一个变量。
+
+所以下面这里创建一个名为 `the RB` 的 Rigidbody 2D 类的变量（创建对 Rigidbody 2D 这个组件类型的引用）：
+
+```c#
+public Rigidbody2D theRB;
+```
+
+此时回到 Unity，会发现 Player 的检查器中多了一个我们刚刚创建好的变量 `The RB`。不过此时它的值是 `None`，你需要将检查器中的 Rigidbody 2D 拖动到下面的 `The RB` 处，或者从 Hierarchy 的场景中将 Player 拖入 `The RB` 中（因为 Player 包含 Rigidbody 2D）。当然，这里如果你不想让在脚本中创建的变量能在 Unity 中被看到且随意修改，你可以将这个变量从 public 改为 private。不过，你也可以点击检查器最右边的省略号，将 Normal 改成 Debug，在调试模式下你也依旧能看到 private 的私有变量。
