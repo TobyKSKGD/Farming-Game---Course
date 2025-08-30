@@ -169,3 +169,107 @@ anim.SetFloat("speed", theRB.linearVelocity.magnitude);
 如此，我们便设置了角色的动画！
 
 ### Flipping The Player
+
+最后我们来实现角色行走时的翻转！
+
+----
+
+这里贴一个前面课程的方法做对比（仅供参考【也可以实现翻转】，后面是本次课程的方法）：
+
+我们在代码中创建一个布尔值 `facingRight` （默认情况下角色将朝右）：
+
+```c#
+private bool facingRight = true;
+```
+
+然后我们写一个翻转方法，就是当执行这个方法时 `facingRight` 这个布尔值不等于它自己也就是相反，然后旋转角色进行翻转：
+
+```c#
+private void Flip()
+    {
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
+    }
+```
+
+然后我们创建一个新方法 FlipController() 调用 Flip() 方法即可，具体实现为当角色向左移动时，其 x 轴上的速度为负数，然后此时如果 facingRight 也为 true 也就是此时角色朝右，我们就进行翻转，向右时反之：
+
+```c#
+private void FlipController()
+    {
+        if (theRB.linearVelocity.x < 0 && facingRight)
+        {
+            Flip();
+        }
+        else if (theRB.linearVelocity.x > 0 && !facingRight)
+        {
+            Flip();
+        }
+    }
+```
+
+最后我们在 Update() 方法中调用 FlipController() 方法即可：
+
+```c#
+FlipController();
+```
+
+----
+
+这里需要注意的一点是，我们翻转的时候是翻转 Player，而不是 Player 下的 Sprite 图片，因为我们之后可能会需要让角色拿东西，而这个东西的贴图也是在 Player 下的，如果只翻转 Sprite 显然是不对的，一定要翻转 Player。而这里翻转的是 Player 中的 `Scale` 值。从 Unity 编辑器上看，如果将 Player 的 `Scale` 的 X 改为 `-1`，可以看到角色翻转了，所以这里更简单的方法是在 Update() 方法中：
+
+```c#
+if(theRB.linearVelocity.x < 0f)
+{
+    transform.localScale = new Vector3(-1f, 1f, 1f);
+}
+else if(theRB.linearVelocity.x > 0f)
+{
+    transform.localScale = Vector3.one;
+}
+```
+
+这里的意思是，如果角色的水平方向小于 0，也就是此时角色有向左的速度，此时将其 Scale 值转变为 `(-1f, 1f, 1f)`，也就是将 Player 的 `Scale` 的 X 改为 `-1`，否则其 Scale 为 `(1, 1, 1)`。这里的几个小细节是，`theRB.linearVelocity.x` 表示 X 轴方向上的向量，`transform.localScale` 表示改变 Scale 的值，`Vector3` 的 3 表示三个轴（因为 Scale 分 X, Y, Z 三个方向），`Vector3.one` 表示的是将三个值写为 (1, 1, 1)。如果这里只写 else，我们测试游戏的时候如果向左移动然后松手，玩家就会翻转回来依旧朝着右侧，因为只写 else，当玩家朝着左侧时此时其速度为 0，在下一次判定中速度为 0，小于 0 不满足，所以进入了 else 条件导致其翻转回来，因此这里的 else if 判定语句是一定要加的。
+
+以上便是这个玩家控制相关的内容，完整脚本代码如下：
+
+```c#
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerController : MonoBehaviour
+{
+    public Rigidbody2D theRB;
+    public float moveSpeed;
+
+    public InputActionReference moveInput;
+
+    public Animator anim;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        theRB.linearVelocity = moveInput.action.ReadValue<Vector2>().normalized * moveSpeed;
+
+        anim.SetFloat("speed", theRB.linearVelocity.magnitude);
+
+        if(theRB.linearVelocity.x < 0f)
+        {
+            transform.localScale = new Vector3(-1f, 1f, 1f);
+        }
+        else if(theRB.linearVelocity.x > 0f)
+        {
+            transform.localScale = Vector3.one;
+        }
+    }
+
+}
+
+```
+
