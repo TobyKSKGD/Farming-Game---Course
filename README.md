@@ -77,3 +77,21 @@ public Rigidbody2D theRB;
 ```
 
 此时回到 Unity，会发现 Player 的检查器中多了一个我们刚刚创建好的变量 `The RB`。不过此时它的值是 `None`，你需要将检查器中的 Rigidbody 2D 拖动到下面的 `The RB` 处，或者从 Hierarchy 的场景中将 Player 拖入 `The RB` 中（因为 Player 包含 Rigidbody 2D）。当然，这里如果你不想让在脚本中创建的变量能在 Unity 中被看到且随意修改，你可以将这个变量从 public 改为 private。不过，你也可以点击检查器最右边的省略号，将 Normal 改成 Debug，在调试模式下你也依旧能看到 private 的私有变量。
+
+### Moving The Player
+
+为了让角色移动起来，我们回到脚本给角色创建一个新的变量 `moveSpeed` 用来表示角色的移动速度：
+
+```c#
+public float moveSpeed;
+```
+
+回到 Unity 就会发现 Player 多了一个 `Move Speed` 的变量，我们可以将其值设置为 `8` 先。
+
+此时如果我们在 Update() 函数中写入：
+
+```c#
+theRB.linearVelocity = new Vector2(moveSpeed, 0f);
+```
+
+这里的意思是给 `theRB` 变量的 `linearVelocity` 水平增加 `(moveSpeed, 0f)`，这里的 Vector2 新变量包含两个值，一个为 X 轴的值，一个为 Y 轴的值，这里向实现水平移动，所以第一个值是移动的速度，第二个值是 `0f`（`0f` 的意思是浮点数的 0，如果只写 `0` 就是 int 类型的数字 0）。前面说过 Update() 函数每一帧都会调用一次，所以这里每一帧都会增加角色的 X 轴的坐标，开启调试的效果就是角色一直往右边走。
