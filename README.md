@@ -58,3 +58,13 @@ Udemy 的课程 Learn To Create A Farming Game With Unity 6 &amp; C# 的笔记�
 设置完后，回到 Player 下 Sprite 的监视器，将其 Sorting Layer 设置为 `Player`。接着也可以将之前Grid 下的 Ground 和 Ground Overlay 的 Sorting Layer 也设置为 `Ground`（Order in Layer 只对同一 Sorting Layer 生效）。现在真正重要的是我们有了层号顺序！
 
 现在我们要添加所谓的碰撞体 rigid body，碰撞体能够使用 Unity 的输入或内置物理系统。选中 Hierarchy 中的 Player，在其监视器中选择 Add Component 添加新的组件，选择 Physics 2D -> Rigidbody 2D（或直接搜索 Rigidbody 2D）。此时测试游戏，你会发现角色下落了，这里需要将碰撞体的 Gravity Scale 从 1 改为 `0`。
+
+### Setting Up Our First Script
+
+现在，我想要我们的玩家可以四处移动，因此需要脚本来控制角色。首先我们现在资料库中的 Assets 下新建一个用来存放脚本的文件夹 `Scripts`。在 Scripts 文件夹下新建脚本，右键 Create -> MonoBehaviour Script（*Unity 6 中将脚本命名为 MonoBehaviour Script，如果在旧的 Unity 中就是 C# Script*），将其命名为 `PlayerController`。
+
+接着需要将这个脚本与角色绑定起来，将脚本拖入 Player 监视器空白部分即可，在监视器中双击这个脚本就可以用 Visual Studio 编译器打开脚本文件了。此时会看到已经自动为我们写好了两个函数的框架，也对这两个函数的作用做了解释：
+
+- Start()：在 MonoBehavior 创建后首次执行 Update 之前，Start() 函数会被调用一次。
+- Update()：每帧调用一次 Update() 函数。
+
