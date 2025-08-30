@@ -137,3 +137,35 @@ theRB.linearVelocity = moveInput.action.ReadValue<Vector2>().normalized * moveSp
 相同的，点击 Animation 中左上角 Player_Idle 位置，我们再在 /Assets/Animations 中新建一个移动的动画 `Player_Move`。将 Art > Tiny Wonder Farm > Character 资产中的 walk and idle 中最后八张图片按 0.05 的间隔一次在时间轴上放置（一共九个关键帧，最后一个是第八张图或第一张图，因为循环动画每次退出最后一帧会很快，这里可以将最后一帧的时间点放在 0:39 上），如下图所示：
 
 ![](./Pictures/Move_Animation.png)
+
+### Making The Animator Work
+
+现在让我们将刚刚做完的动画真正作用于我们的角色！
+
+那首先需要知道怎么打开 Animator 窗口，如果你的 Unity 界面没有 Animator 窗口，可以点击左上角 Window -> Animation -> Animator。
+
+Animator 中的 Entry 是进入动画的入口，也就是动画的起点，我们可以右键非默认动画，选择 Set as Layer Default State，将动画改为默认动画，不过这里选择 Player_Idle 为默认动画。还有就是 Any State 状态，基本上是一种从任意特定状态过渡的方式，时刻进入一个新状态。
+
+所以我们要做的就是找到一种方法来在两种状态之间移动，为此我们可以创建一个连接。右键 Player_Idle -> Make Transition，连接 Player_Move。点击箭头，首先我们需要做到是需要勾选 Has Exit Time 这个选项，这样状态转换的时候才不会有延迟。不过这样会跳出一个报错警告，编辑器告诉我们不想直接转到新的动画，现在我们先不去管这个警告。点开下面的 Settings 还有一个需要注意的变量是 Transition Duration，这个是在某些场景下通过这种过渡让角色身体从一个位置平稳运动，让同一个角色的身体从一个位置到另一个位置，不过这里我们只想让 Sprite 快速到另一个状态，所以这里的变量设置为 `0` 即可。
+
+可以看到此时检查器中 Conditions 的变量是没有的，我们可以点击 Animator 中的 Parameters 新建一个 Float 变量 `speed`。然后点击 Conditions 中的加号添加 `speed` 变量。然后选择 `Greater`，并且将值改为 `0.1`，意思是如果速度大于 0.1，那么就执行这个箭头。
+
+相反的，我们需要在 Player_Move 到 Player_Idle 之间做过渡连接，方法与前面一样，然后别忘记给箭头的 Has Exit Time 和 Transition Duration 变量做设置，然后也是个 Conditions 添加一个变量 `speed`，然后选择 `Less`，值为 `0.1`。
+
+接下来我们需要回到脚本，利用脚本控制 `speed` 这个变量。这里新建一个 Animator 类的变量 `anim`：
+
+```c#
+public Animator anim;
+```
+
+回到 Unity，查看 Sprite，可以看到新建的 Animator 状态栏。点击 Player，我们将 Player 下的 Sprite 拖到 Anim 这个变量中（这个 Sprite 也可以在 /Assets/Animations 下找到）。我们在 Update() 方法下写入：
+
+```c#
+anim.SetFloat("speed", theRB.linearVelocity.magnitude);
+```
+
+这里的意思是我们设置 anim 的 speed 的数值为 `theRB.linearVelocity.magnitude`，anim 是刚刚创建的对我们角色的动画器实例，前面在 Unity 编辑器中新建的变量 speed 实际上是字符串 String，所以这里要加上双引号并且保证这里的变量名和 Unity 编辑器中新建的变量名完全一致，`theRB.linearVelocity` 表示的是水平方向向量，可以分为 x 和 y 两个方向，但是这里需要的是一个数值，于是取下面的 `magnitude` 方法，表示其值。
+
+如此，我们便设置了角色的动画！
+
+### Flipping The Player
