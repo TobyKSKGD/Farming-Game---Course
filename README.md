@@ -114,4 +114,15 @@ public InputActionReference moveInput;
 theRB.linearVelocity = moveInput.action.ReadValue<Vector2>() * moveSpeed;
 ```
 
-回到 Unity 调试，此时使用 WASD 便可以控制我们的角色了。这里 `moveInput.action.ReadValue<Vector2>()` 是获取玩家输入的方向，乘上角色的移动速度便是整个移动的实现。
+回到 Unity 调试，此时使用 WASD 便可以控制我们的角色了。这里 `moveInput.action.ReadValue<Vector2>()` 是获取玩家输入的方向，乘上角色的移动速度便是整个移动的实现。（如果你有手柄控制器，可以试试一样可以用左摇杆控制移动）
+
+### Limiting Diagonal Movement
+
+调试的时候，我们发现斜着移动的时候速度比水平移动的速度快一些，因为在斜着移动的时候，没有减慢一个方向上的移动速度，只是增加了另一个方向上的速度。这样可能导致键盘的控制方式和手柄控制速度不符的问题。
+
+Unity 为我们提供了解决方案以至于我们不需要计算三角形，其做法就是在 `moveInput.action.ReadValue<Vector2>()` 后面加上 `normalized` 即可标准化输入的向量，将其控制在 0 到 1 之间。
+
+```c#
+theRB.linearVelocity = moveInput.action.ReadValue<Vector2>().normalized * moveSpeed;
+```
+
