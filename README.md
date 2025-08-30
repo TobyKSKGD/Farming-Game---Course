@@ -126,3 +126,14 @@ Unity 为我们提供了解决方案以至于我们不需要计算三角形，�
 theRB.linearVelocity = moveInput.action.ReadValue<Vector2>().normalized * moveSpeed;
 ```
 
+### Setting Up Animations
+
+接下来我们为角色移动加入动画！
+
+首先要知道怎么打开动画窗口，如果你的 Unity 界面没有 Animation 窗口，可以点击左上角 Window -> Animation -> Animation。
+
+我们先为动画创建一个文件夹，在 Assets 中新建 Animations，点击 Player 下的 Sprite，然后在 Animation 中 Create 一个新的动画 `Player_Idle` 在 Animations 文件内。然后选择 Art > Tiny Wonder Farm > Character 资产中的 walk and idle 中选择空闲状态的动作，也就是第三张图和第四张图。我们将第三章图拖动到 Animation 中的 0:00 时间点上，然后将第四张图拖动到 0:15 时间点上，最后再将第三张图拖动到 0:30 时间点上，这样就简单实现了一个空闲动作的循环。
+
+相同的，点击 Animation 中左上角 Player_Idle 位置，我们再在 /Assets/Animations 中新建一个移动的动画 `Player_Move`。将 Art > Tiny Wonder Farm > Character 资产中的 walk and idle 中最后八张图片按 0.05 的间隔一次在时间轴上放置（一共九个关键帧，最后一个是第八张图或第一张图，因为循环动画每次退出最后一帧会很快，这里可以将最后一帧的时间点放在 0:39 上），如下图所示：
+
+![](./Pictures/Move_Animation.png)
